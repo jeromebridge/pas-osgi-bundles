@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.pennassurancesoftware.bundles</groupId>
+    <artifactId>bundles-pom</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>OSGi :: Bundles</name>
+
+    <properties>
+        <pennassurancesoftware.legal.version>1.0</pennassurancesoftware.legal.version>
+        <pennassurancesoftware.osgi.export>${pennassurancesoftware.osgi.export.pkg}*;version=${pkgVersion};-split-package:=merge-first</pennassurancesoftware.osgi.export>
+        <pennassurancesoftware.osgi.export.pkg />
+        <pennassurancesoftware.osgi.import.pkg />
+        <pennassurancesoftware.osgi.private.pkg />
+        <pennassurancesoftware.osgi.dynamicimport.pkg />
+        <pennassurancesoftware.osgi.failok>false</pennassurancesoftware.osgi.failok>
+        <pennassurancesoftware.osgi.embed.dependency />
+        <pennassurancesoftware.osgi.fragment.host />
+        <pennassurancesoftware.osgi.native />
+        <pennassurancesoftware.osgi.activator />
+        <pennassurancesoftware.osgi.provide.capability />
+        <pennassurancesoftware.osgi.require.capability />
+        <pennassurancesoftware.spi.provider />
+        <pennassurancesoftware.spi.consumer />
+    </properties>
+
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
+
+    <scm>
+        <connection>scm:git:git@github.com:jeromebridge/pas-osgi-bundles.git</connection>
+        <developerConnection>scm:git:git@github.com:jeromebridge/pas-osgi-bundles.git</developerConnection>
+        <url>https://github.com/jeromebridge/pas-osgi-bundles</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <build>
+        <defaultGoal>install</defaultGoal>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.4.2</version>
+                    <configuration>
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <preparationGoals>clean install</preparationGoals>
+                        <goals>deploy</goals>
+                        <arguments>-Prelease</arguments>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                        <remoteTagging>false</remoteTagging>
+                        <!-- avoid remote tagging as it requires an <scm /> section for every bundle -->
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.16</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>1.7.1</version>
+                    <executions>
+                        <execution>
+                            <id>sources</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                            <configuration>
+                                <artifactSet>
+                                    <includes>
+                                        <include>*:*:*:sources</include>
+                                        <include>${project.groupId}:${project.artifactId}:*:sources</include>
+                                    </includes>
+                                </artifactSet>
+                                <filters>
+                                    <filter>
+                                        <artifact>*:*</artifact>
+                                        <excludes>
+                                            <exclude>**/*.class</exclude>
+                                        </excludes>
+                                    </filter>
+                                </filters>
+                                <transformers>
+                                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        <manifestEntries>
+                                            <Bundle-SymbolicName>${project.artifactId}.source</Bundle-SymbolicName>
+                                            <Eclipse-SourceBundle>${project.artifactId};version="${project.version}"</Eclipse-SourceBundle>
+                                        </manifestEntries>
+                                    </transformer>
+                                </transformers>
+                                <promoteTransitiveDependencies>false</promoteTransitiveDependencies>
+                                <shadedArtifactAttached>true</shadedArtifactAttached>
+                                <shadedClassifierName>sources</shadedClassifierName>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.2.1</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration>
+                                <includePom>true</includePom>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.7</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jarsigner-plugin</artifactId>
+                    <version>1.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.4</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.servicemix.bundles</groupId>
+                            <artifactId>src-assembly</artifactId>
+                            <version>1.0</version>
+                        </dependency>
+                    </dependencies>
+                    <executions>
+                        <execution>
+                            <id>make-src-assembly</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                            <configuration>
+                                <descriptorRefs>
+                                    <descriptorRef>src-assembly</descriptorRef>
+                                </descriptorRefs>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.3.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Description>${project.description}</Bundle-Description>
+                        <Export-Package>${pennassurancesoftware.osgi.export}</Export-Package>
+                        <Import-Package>${pennassurancesoftware.osgi.import.pkg}</Import-Package>
+                        <Private-Package>${pennassurancesoftware.osgi.private.pkg}</Private-Package>
+                        <DynamicImport-Package>${pennassurancesoftware.osgi.dynamicimport.pkg}</DynamicImport-Package>
+                        <Embed-Dependency>${pennassurancesoftware.osgi.embed.dependency}</Embed-Dependency>
+                        <Bundle-NativeCode>${pennassurancesoftware.osgi.native}</Bundle-NativeCode>
+                        <Bundle-Activator>${pennassurancesoftware.osgi.activator}</Bundle-Activator>
+                        <Fragment-Host>${pennassurancesoftware.osgi.fragment.host}</Fragment-Host>
+                        <Provide-Capability>${pennassurancesoftware.osgi.provide.capability}</Provide-Capability>
+                        <Require-Capability>${pennassurancesoftware.osgi.require.capability}</Require-Capability>
+                        <SPI-Provider>${pennassurancesoftware.spi.provider}</SPI-Provider>
+                        <SPI-Consumer>${pennassurancesoftware.spi.consumer}</SPI-Consumer>
+                        <_failok>${pennassurancesoftware.osgi.failok}</_failok>
+                        <_versionpolicy>[$(version;==;$(@)),$(version;+;$(@)))</_versionpolicy>
+                        <_removeheaders>Ignore-Package,Include-Resource,Private-Package,Embed-Dependency
+                        </_removeheaders>
+                    </instructions>
+                    <unpackBundle>true</unpackBundle>
+                </configuration>
+            </plugin>
+            <!-- <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.8</version>
+                <executions>
+                <execution>
+                <id>copy-legal</id>
+                <phase>generate-resources</phase>
+                <goals>
+                <goal>copy</goal>
+                </goals>
+                <configuration>
+                <artifactItems>
+                <artifactItem>
+                <groupId>com.pennassurancesoftware.legal</groupId>
+                <artifactId>legal</artifactId>
+                <version>${pennassurancesoftware.legal.version}</version>
+                <type>xml</type>
+                <outputDirectory>target/legal/</outputDirectory>
+                </artifactItem>
+                </artifactItems>
+                <stripVersion>true</stripVersion>
+                </configuration>
+                </execution>
+                </executions>
+                <dependencies>
+                <dependency>
+                <groupId>com.pennassurancesoftware.legal</groupId>
+                <artifactId>legal</artifactId>
+                <version>${pennassurancesoftware.legal.version}</version>
+                <type>xml</type>
+                </dependency>
+                </dependencies>
+                </plugin>
+                <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                <goal>process</goal>
+                </goals>
+                <configuration>
+                <resourceBundles>
+                <resourceBundle>org.apache:apache-jar-resource-bundle:1.4</resourceBundle>
+                </resourceBundles>
+                <supplementalModels>
+                <supplementalModel>target/legal/legal.xml</supplementalModel>
+                </supplementalModels>
+                </configuration>
+                </execution>
+                </executions>
+                </plugin> -->
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <!-- We want to deploy the artifact to a staging location for perusal -->
+                    <plugin>
+                        <inherited>true</inherited>
+                        <artifactId>maven-deploy-plugin</artifactId>
+                        <version>2.8.1</version>
+                        <configuration>
+                            <updateReleaseInfo>true</updateReleaseInfo>
+                        </configuration>
+                    </plugin>
+                    <!-- We want to sign the artifact, the POM, and all attached artifacts -->
+                    <plugin>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.4</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
