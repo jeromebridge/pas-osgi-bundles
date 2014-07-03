@@ -326,7 +326,7 @@
                         </configuration>
                     </plugin>
                     <!-- We want to sign the artifact, the POM, and all attached artifacts -->
-                    <plugin>
+                    <!-- <plugin>
                         <artifactId>maven-gpg-plugin</artifactId>
                         <version>1.4</version>
                         <executions>
@@ -336,7 +336,7 @@
                                 </goals>
                             </execution>
                         </executions>
-                    </plugin>
+                    </plugin> -->
                 </plugins>
             </build>
         </profile>
