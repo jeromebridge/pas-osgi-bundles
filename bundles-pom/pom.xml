@@ -5,7 +5,7 @@
     <groupId>com.pennassurancesoftware.bundles</groupId>
     <artifactId>bundles-pom</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>OSGi :: Bundles</name>
 
     <properties>
@@ -78,7 +78,7 @@
         <connection>scm:git:git@github.com:jeromebridge/pas-osgi-bundles.git</connection>
         <developerConnection>scm:git:git@github.com:jeromebridge/pas-osgi-bundles.git</developerConnection>
         <url>https://github.com/jeromebridge/pas-osgi-bundles</url>
-        <tag>bundles-pom-1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <build>
