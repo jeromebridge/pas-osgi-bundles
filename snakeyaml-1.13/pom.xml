@@ -18,7 +18,7 @@
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    
+
         <pkgGroupId>org.yaml</pkgGroupId>
         <pkgArtifactId>snakeyaml</pkgArtifactId>
         <pkgVersion>1.13</pkgVersion>
@@ -26,7 +26,7 @@
             org.yaml.snakeyaml
         </pennassurancesoftware.osgi.export.pkg>
         <pennassurancesoftware.osgi.import.pkg>
-            
+            *
         </pennassurancesoftware.osgi.import.pkg>
     </properties>
 
@@ -63,6 +63,14 @@
                                     <include>${pkgGroupId}:${pkgArtifactId}</include>
                                 </includes>
                             </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>${pkgGroupId}:${pkgArtifactId}</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
