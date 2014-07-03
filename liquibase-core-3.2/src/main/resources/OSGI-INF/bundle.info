@@ -1,0 +1,12 @@
+\u001B[1mSYNOPSIS\u001B[0m
+    ${project.description}
+
+    Original Maven URL:
+        \u001B[33mmvn:${pkgGroupId}/${pkgArtifactId}/${pkgVersion}\u001B[0m
+
+\u001B[1mDESCRIPTION\u001B[0m
+    Liquibase is an open source database-independent library for tracking, managing and applying database schema changes. 
+    It was started in 2006 to allow easier tracking of database changes, especially in an agile software development environment.
+
+\u001B[1mSEE ALSO\u001B[0m
+    \u001B[36mhttp://www.liquibase.org/documentation/index.html\u001B[0m

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.pennassurancesoftware.bundles</groupId>
+        <artifactId>bundles-pom</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>com.pennassurancesoftware.bundles.liquibase-core</artifactId>
+    <version>3.2.0-SNAPSHOT</version>
+    <packaging>bundle</packaging>
+    <name>Penn Assurance Software :: Bundles :: ${pkgArtifactId}</name>
+    <description>This OSGi bundle wraps ${pkgArtifactId} ${pkgVersion} jar file.</description>
+
+    <properties>
+        <pkgGroupId>org.liquibase</pkgGroupId>
+        <pkgArtifactId>liquibase-core</pkgArtifactId>
+        <pkgVersion>3.2.0</pkgVersion>
+        <pennassurancesoftware.osgi.export.pkg>
+            liquibase
+        </pennassurancesoftware.osgi.export.pkg>
+        <pennassurancesoftware.osgi.import.pkg>
+            javax.naming;resolution:=optional,
+            javax.servlet;resolution:=optional,
+            javax.servlet.http;resolution:=optional,
+            javax.sql,
+            javax.swing, 
+            javax.xml.parsers, 
+            javax.xml.transform, 
+            javax.xml.transform.dom, 
+            javax.xml.transform.stream, 
+            junit.framework;resolution:=optional, 
+            org.apache.commons.cli;resolution:=optional, 
+            org.apache.tools.ant;resolution:=optional, 
+            org.apache.tools.ant.types;resolution:=optional, 
+            org.apache.velocity, 
+            org.apache.velocity.app, 
+            org.apache.velocity.context, 
+            org.apache.velocity.runtime.resource.loader, 
+            org.eclipse.jetty.server;resolution:=optional, 
+            org.eclipse.jetty.server.handler;resolution:=optional, 
+            org.eclipse.jetty.util.log;resolution:=optional, 
+            org.junit;resolution:=optional, 
+            org.junit.experimental.theories;resolution:=optional, 
+            org.springframework.beans.factory;resolution:=optional, 
+            org.springframework.context;resolution:=optional, 
+            org.springframework.core.io;resolution:=optional, 
+            org.springframework.core.io.support;resolution:=optional, 
+            org.w3c.dom, 
+            org.xml.sax, 
+            org.xml.sax.ext, 
+            org.xml.sax.helpers, 
+            org.yaml.snakeyaml, 
+            org.yaml.snakeyaml.introspector, 
+            org.yaml.snakeyaml.nodes, 
+            org.yaml.snakeyaml.representer
+        </pennassurancesoftware.osgi.import.pkg>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>${pkgGroupId}</groupId>
+            <artifactId>${pkgArtifactId}</artifactId>
+            <version>${pkgVersion}</version>
+        </dependency>
+
+        <!-- sources -->
+        <dependency>
+            <groupId>${pkgGroupId}</groupId>
+            <artifactId>${pkgArtifactId}</artifactId>
+            <version>${pkgVersion}</version>
+            <classifier>sources</classifier>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>${pkgGroupId}:${pkgArtifactId}</include>
+                                </includes>
+                            </artifactSet>
+                            <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
