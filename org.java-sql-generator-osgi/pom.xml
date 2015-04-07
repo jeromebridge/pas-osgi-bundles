@@ -90,12 +90,13 @@
                         <Bundle-Name>${project.name}</Bundle-Name>
                         <Bundle-Version>${project.version}</Bundle-Version>
                         <Embed-Dependency>
-                            org.java-sql-generator.api
+                            org.java-sql-generator.api,
+                            org.java-sql-generator.implementation
                         </Embed-Dependency>
                         <Embed-Transitive>true</Embed-Transitive>
                         <Embed-Directory>jars</Embed-Directory>
                         <Private-Package>*</Private-Package>
-                        <Export-Package>org.sql.generation.api.*;-split-package:=merge-first</Export-Package>
+                        <Export-Package>org.sql.generation.*;-split-package:=merge-first</Export-Package>
                         <Import-Package>
                             junit*;resolution:=optional,
                             *
